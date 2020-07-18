@@ -6,12 +6,11 @@
             otherwise first duplicate in the integer list *)
 (* Signature: val firstduplicate: int list -> int = <fun> *)
 let rec first_duplicate = function alist ->
-  if alist == [] then failwith "List cannot be empty." else
-    if List.mem (List.hd alist) (List.tl alist) == true then List.hd alist
+if List.mem (List.hd alist) (List.tl alist) == true then List.hd alist
+  else
+    if List.tl alist == [] then -10000
     else
-      if List.tl alist == [] then -10000
-      else
-        first_duplicate (List.tl alist);;
+      first_duplicate (List.tl alist);;
 
 
 (* Problem 2: First Non-Repeating Element in a List *)
@@ -27,40 +26,43 @@ let list_countdown = function alist ->
       otherwise first non-repeating element in alist *)
 (* Signature: val first_nonrepeating : int list -> int = <fun> *)
 let rec first_nonrepeating = function alist ->
-  if alist == [] then failwith "List cannot be empty." else
-    if List.mem (List.hd alist) (List.tl alist) == false then List.hd alist
-    else
-      if list_countdown(List.tl alist) == 1 then -10000
-        else
-          first_nonrepeating ((List.tl alist)@[List.hd alist]);;
+if List.mem (List.hd alist) (List.tl alist) == false then List.hd alist
+  else
+    if list_countdown(List.tl alist) == 1 then -10000
+      else
+        first_nonrepeating ((List.tl alist)@[List.hd alist]);;
 
 (* Problem Three: The Sum of 2 Problem *)
 (* Prototype: sumofTwo(a,b,v) *)
 (* Signature: val sumOfTwo : int list * int list * int -> bool = <fun> *)
 let rec sumOfTwo = function (a,b,v) ->
-    if a == [] || b == [] then false else
-      if List.hd a + List.hd b == v then true
+if a == [] || b == [] then false
+  else
+    if List.hd a + List.hd b == v then true
       else sumOfTwo(List.tl a, b, v) || sumOfTwo(a, List.tl b, v);;
 
 
 (* Problem Four: CYK Parsing Algorithm-Inspired Problem *)
-(* Prototype: cyk_sublists n *)
-(* Signature: val cyk_sublists : int -> (int * int) list = <fun> *)
+
+(* Helper Function - make_decreasing_sublist n *)
+(* n is the initial list value, continues to 1 *)
 let rec make_decreasing_sublist = function n ->
   if n>1 then (n-1)::make_decreasing_sublist(n-1) else [];;
 
-let reverse =
-  let rec rev_append acc alist =
-    match alist with
-      [] -> acc
-      | h::t -> rev_append (h::acc) t in
-    function alist -> rev_append [] alist;;
+(* Helper Function - make_increasing_sublist (i,n) *)
+(* i is the initial list value, n is the length of list *)
+let rec make_increasing_sublist = function (i,n) ->
+  if n > 1 then i::make_increasing_sublist(i+1,n-1) else [];;
 
+(* Helper Function - pairwise alista alistb *)
+(* concatenates two lists alista alistb -> (a, b) *)
 let rec pairwise alista alistb =
-match alista, alistb with
-    | [], _ -> []
-    | _, [] -> []
-    | hd :: tl, hd2 :: tl2 -> (hd, hd2) :: (pairwise tl tl2)
+  match alista, alistb with
+      | [], _ -> []
+      | _, [] -> []
+      | hd :: tl, hd2 :: tl2 -> (hd, hd2) :: (pairwise tl tl2)
 
+(* Prototype: cyk_sublists n *)
+(* Signature: val cyk_sublists : int -> (int * int) list = <fun> *)
 let rec cyk_sublists = function n ->
-(pairwise (reverse(make_decreasing_sublist(n))) (make_decreasing_sublist(n)));;
+  (pairwise (make_increasing_sublist(1,n)) (make_decreasing_sublist(n)));;
