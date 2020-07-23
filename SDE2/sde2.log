@@ -1,0 +1,36 @@
+Matt Franchi // CPSC 3520 // SDE2 Log // Summer 2020
+
+first_duplicate/2
+
+?- first_duplicate([1,2,3,4,5,6,7],D).
+false.
+
+?- first_duplicate([1,3,2,2,1,5,6,7],D).
+D = 1 .
+
+
+first_nonrepeating/2
+
+?- first_nonrepeating([1,1,2,2,3,4,4,5,5,6],NR).
+NR = 3 .
+
+?- first_nonrepeating([1,1,1,2,2,2,3,3,3],NR).
+false.
+
+
+sum_of_two/3
+
+?- sum_of_two([10,20,30,40],[1,2,3,4],40).
+false.
+
+?- sum_of_two([10,20,30,40],[1,2,3,4],33).
+true .
+
+
+cyk_sublists/2
+
+?- cyk_sublists(5,Decompositions).
+Decompositions = [[1, 4], [2, 3], [3, 2], [4, 1]] .
+
+?- cyk_sublists(11,Decompositions).
+Decompositions = [[1, 10], [2, 9], [3, 8], [4, 7], [5, 6], [6, 5], [7, 4], [8|...], [...|...]|...] .
